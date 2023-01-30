@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ms.Tdd.Adf.Tests", "ClassLibrary1\Ms.Tdd.Adf.Tests.csproj", "{1BB235DC-BB8F-45E1-AFE3-47CE05BF5447}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ms.Tdd.Adf.Tests.Specs", "ClassLibrary1\Ms.Tdd.Adf.Tests.Specs.csproj", "{1BB235DC-BB8F-45E1-AFE3-47CE05BF5447}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
