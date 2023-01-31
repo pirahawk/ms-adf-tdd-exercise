@@ -5,6 +5,7 @@
 
 # Specflow feature files exclusion
 *.feature.cs
+appsettings.local.json
 
 # User-specific files
 *.rsuser

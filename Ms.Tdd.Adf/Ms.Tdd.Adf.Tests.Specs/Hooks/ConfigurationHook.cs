@@ -14,6 +14,7 @@ namespace Ms.Tdd.Adf.Tests.Specs.Hooks
         {
             var configurationBuilder = new ConfigurationBuilder()
                 .AddJsonFile($"appsettings.json", true, true)
+                .AddJsonFile($"appsettings.local.json", true, true)
                 .AddUserSecrets(Assembly.GetExecutingAssembly(), true)
                 .AddEnvironmentVariables();
 
