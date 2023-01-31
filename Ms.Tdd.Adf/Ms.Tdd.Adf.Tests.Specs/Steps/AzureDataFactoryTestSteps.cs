@@ -8,13 +8,13 @@ using Xunit;
 namespace Ms.Tdd.Adf.Tests.Specs.Steps
 {
     [Binding]
-    public class TestSteps
+    public class AzureDataFactoryTestSteps
     {
         private readonly ScenarioContext scenarioContext;
         private readonly IConfiguration configuration;
         private readonly AzureDataFactoryConfiguration azureDataFactoryConfiguration;
 
-        public TestSteps(ScenarioContext scenarioContext, IConfiguration configuration, AzureDataFactoryConfiguration azureDataFactoryConfiguration)
+        public AzureDataFactoryTestSteps(ScenarioContext scenarioContext, IConfiguration configuration, AzureDataFactoryConfiguration azureDataFactoryConfiguration)
         {
             this.scenarioContext = scenarioContext ?? throw new ArgumentNullException(nameof(scenarioContext));
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
