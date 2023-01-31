@@ -9,7 +9,7 @@ namespace Ms.Tdd.Adf.Tests.Specs.Hooks
     [Binding]
     public class ConfigurationBuilderSetupHook
     {
-        [BeforeScenario]
+        [BeforeScenario(Order = 0)]
         public void LoadConfigurationBeforeScenario(ScenarioContext scenarioContext, IObjectContainer objectContainer)
         {
             var configurationBuilder = new ConfigurationBuilder()
