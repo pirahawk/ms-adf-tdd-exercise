@@ -17,7 +17,7 @@ namespace Ms.Tdd.Adf.Tests.Specs.Hooks
                 "https://management.azure.com/.default"
         };
 
-        [BeforeScenario(Order = 1)]
+        [BeforeScenario("RequiresAdf", Order = 1)]
         public async Task LoadConfigurationBeforeScenario(ScenarioContext scenarioContext, IObjectContainer objectContainer, IConfiguration configuration)
         {
             if (configuration is null)

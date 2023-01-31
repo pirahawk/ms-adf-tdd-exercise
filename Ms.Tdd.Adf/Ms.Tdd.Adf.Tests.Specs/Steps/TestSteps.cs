@@ -21,23 +21,25 @@ namespace Ms.Tdd.Adf.Tests.Specs.Steps
             this.azureDataFactoryConfiguration = azureDataFactoryConfiguration ?? throw new ArgumentNullException(nameof(azureDataFactoryConfiguration));
         }
 
-        [Given(@"I am writing a Test")]
-        public async Task GivenIAmWritingATest()
+        [When(@"I invoke the Azure Data Factory Pipeline '([^']*)'")]
+        public async Task WhenIInvokeTheAzureDataFactoryPipelineCopyBlobBetweenContainersPipeline(string adfPipelineName)
         {
+            adfPipelineName.Should().NotBeNullOrWhiteSpace();
+
             var adfClient = DataFactoryManagementClient;
-            
+
             if (adfClient == null)
             {
                 Assert.Fail("Could not create DataFactoryManagementClient");
             }
 
             var adfRunResponse = await adfClient!.Pipelines.CreateRunAsync(
-                azureDataFactoryConfiguration.ResourceGroupName, 
-                azureDataFactoryConfiguration.FactoryName, 
-                "copyBlobBetweenContainersPipeline").ConfigureAwait(false);
+                azureDataFactoryConfiguration.ResourceGroupName,
+                azureDataFactoryConfiguration.FactoryName,
+                adfPipelineName).ConfigureAwait(false);
 
             adfRunResponse.Should().NotBeNull();
-            adfRunResponse.RunId.Should().NotBeNullOrEmpty();
+            adfRunResponse.RunId.Should().NotBeNullOrWhiteSpace();
         }
 
         private DataFactoryManagementClient? DataFactoryManagementClient => this.scenarioContext.Get<DataFactoryManagementClient>(ScenarioContextValues.ADF_CLIENT);
