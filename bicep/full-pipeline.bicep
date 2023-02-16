@@ -22,31 +22,37 @@ module deployStorageAccount 'modules/storage.bicep' = {
   }
 }
 
+module deployAzSqlServer './modules/sqlserver.bicep' = {
+  name: 'deployAzSqlServer'
+  params: {
+    targetLocation: targetLocation
+    sqlServerName: sqlServerName
+    sqlDbName: sqlDbName
+    sqlAdminName: sqlAdminName
+    sqlAdminPassword: sqlAdminPassword
+    login: mail
+    sid: sid
+    tenantId: tenantId
+  }
+}
+
 module deployAdf 'modules/data-factory.bicep' = {
   name: 'deployAdf'
-  dependsOn: [ deployStorageAccount ]
+  dependsOn: [ deployStorageAccount, deployAzSqlServer ]
   params: {
     targetLocation: targetLocation
     storageAccountName: storageAccountName
     adfName : adfName
     storageInputDatasetContainerName: deployStorageAccount.outputs.adfInputContainerName
     storageOutputDatasetContainerName: deployStorageAccount.outputs.adfOutputContainerName
+    sqlServerName: sqlServerName
+    sqlDbName: sqlDbName
+    sqlAdminName: sqlAdminName
+    sqlAdminPassword: sqlAdminPassword
   }
 }
 
-module deployAzSqlServer './modules/sqlserver.bicep' = {
-  name: 'deployAzSqlServer'
-  params: {
-    targetLocation: targetLocation
-    sqlServerName: sqlServerName
-    sqlAdminName: sqlAdminName
-    sqlAdminPassword: sqlAdminPassword
-    sqlDbName: sqlDbName
-    login: mail
-    sid: sid
-    tenantId: tenantId
-  }
-}
+
 
 module rbacAssign 'modules/rbac-assign.bicep' = {
   name: 'assignRbacRoles'

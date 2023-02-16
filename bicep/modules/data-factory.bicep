@@ -3,6 +3,11 @@ param storageAccountName string
 param adfName string
 param storageInputDatasetContainerName string
 param storageOutputDatasetContainerName string
+param sqlServerName string
+param sqlDbName string
+param sqlAdminName string
+@secure()
+param sqlAdminPassword string
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' existing = {
   name: storageAccountName
@@ -24,6 +29,16 @@ resource azuredatafactory 'Microsoft.DataFactory/factories@2018-06-01' = {
       type:'AzureBlobStorage'
       typeProperties:{
         connectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value}'
+      }
+    }
+  }
+
+  resource azsqllinkedservice 'linkedservices@2018-06-01' = {
+    name: 'adfSqlDb'
+    properties:{
+      type: 'AzureSqlDatabase'
+      typeProperties:{
+        connectionString: 'Data Source=tcp:${sqlServerName}.database.windows.net,1433;Initial Catalog=${sqlDbName};User ID=${sqlAdminName};Password=${sqlAdminPassword};Trusted_Connection=False;Encrypt=True;Connection Timeout=30'
       }
     }
   }
