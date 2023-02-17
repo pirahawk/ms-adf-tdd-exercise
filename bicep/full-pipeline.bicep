@@ -56,10 +56,10 @@ module deployAdf 'modules/data-factory.bicep' = {
 
 module rbacAssign 'modules/rbac-assign.bicep' = {
   name: 'assignRbacRoles'
-  dependsOn: [ deployStorageAccount, deployAdf]
+  dependsOn: [ deployStorageAccount, deployAzSqlServer, deployAdf]
   params:{
-    targetLocation: targetLocation
     storageAccountName: storageAccountName
+    sqlServerName: sqlServerName
     adfName : adfName
     adfPrincipalId: deployAdf.outputs.adfPrincipalId
   }
