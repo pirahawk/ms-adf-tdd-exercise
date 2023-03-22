@@ -1,7 +1,8 @@
 ﻿namespace Ms.Tdd.Adf.Tests.Specs.Models
 {
-    public class AzureBlobStorageConfiguraton
+    public record AzureBlobStorageConfiguraton
     {
         public string Uri { get; set; }
+        public string UploadContainerName { get; set; }
     }
 }

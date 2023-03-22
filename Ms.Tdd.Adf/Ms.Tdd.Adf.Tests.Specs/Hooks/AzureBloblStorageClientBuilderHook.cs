@@ -10,8 +10,8 @@ namespace Ms.Tdd.Adf.Tests.Specs.Hooks
     [Binding]
     public class AzureBloblStorageClientBuilderHook
     {
-        [BeforeScenario("RequiresBlobStorage", Order = 1)]
-        public async Task BuildAzureBlobStorageClient(
+        [BeforeScenario(Order = 1)]
+        public static async Task BuildAzureBlobStorageClient(
             ScenarioContext scenarioContext, 
             IObjectContainer objectContainer, 
             IConfiguration configuration, 
@@ -24,7 +24,9 @@ namespace Ms.Tdd.Adf.Tests.Specs.Hooks
 
             AzureBlobStorageConfiguraton? azureBlobStorageConfiguraton = configuration.GetSection("AzureBlobStorage").Get<AzureBlobStorageConfiguraton>();
             var blobServiceClient = new BlobServiceClient(new Uri(azureBlobStorageConfiguraton!.Uri), new AzureCliCredential());
-            scenarioContext.Add(ScenarioContextValues.BLOB_CLIENT, blobServiceClient);
+            
+            objectContainer.RegisterInstanceAs(azureBlobStorageConfiguraton);
+            objectContainer.RegisterInstanceAs(blobServiceClient);
         }
     }
 }

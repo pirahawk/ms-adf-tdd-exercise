@@ -12,16 +12,11 @@ namespace Ms.Tdd.Adf.Tests.Specs.Hooks
     [Binding]
     public class AzureDataFactoryClientBuilderHook
     {
-        private readonly string[] requiredScopes = new[]
-        {
-                "https://management.azure.com/.default"
-        };
-
-        [BeforeScenario("RequiresAdf", Order = 1)]
+        [BeforeScenario(Order = 1)]
         public async Task LoadConfigurationBeforeScenario(
-            ScenarioContext scenarioContext, 
-            IObjectContainer objectContainer, 
-            IConfiguration configuration, 
+            ScenarioContext scenarioContext,
+            IObjectContainer objectContainer,
+            IConfiguration configuration,
             ADFTestConfiguration adfTestConfiguration)
         {
             if (configuration is null)
@@ -35,15 +30,20 @@ namespace Ms.Tdd.Adf.Tests.Specs.Hooks
             }
 
             AzureDataFactoryConfiguration? azureDataFactoryConfiguration = configuration.GetSection("AzureDataFactory").Get<AzureDataFactoryConfiguration>();
-            objectContainer.RegisterInstanceAs(azureDataFactoryConfiguration!);
             DataFactoryManagementClient adfClient = await BuildAdfTestClient(azureDataFactoryConfiguration, adfTestConfiguration).ConfigureAwait(false);
-            scenarioContext.Add(ScenarioContextValues.ADF_CLIENT, adfClient);
+
+            objectContainer.RegisterInstanceAs(azureDataFactoryConfiguration!);
+            objectContainer.RegisterInstanceAs(adfClient);
         }
 
         private async Task<DataFactoryManagementClient> BuildAdfTestClient(AzureDataFactoryConfiguration? azureDataFactoryConfiguration, ADFTestConfiguration? adfTestConfiguration)
         {
             // TODO: Change Credentials to obey `adfTestConfiguration.UseAzureCliCredentials` flag when ready.
             var azureCliCredentials = new AzureCliCredential();
+            var requiredScopes = new[]
+            {
+                "https://management.azure.com/.default"
+            };
             var accessToken = await azureCliCredentials.GetTokenAsync(new TokenRequestContext(requiredScopes, tenantId: azureDataFactoryConfiguration?.TenantId)).ConfigureAwait(false);
             var adfClient = new DataFactoryManagementClient(new TokenCredentials(accessToken.Token))
             {
