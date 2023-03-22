@@ -10,7 +10,7 @@ using TechTalk.SpecFlow;
 namespace Ms.Tdd.Adf.Tests.Specs.Hooks
 {
     [Binding]
-    public class AzureDataFactoryBuilderSetupHook
+    public class AzureDataFactoryClientBuilderHook
     {
         private readonly string[] requiredScopes = new[]
         {
@@ -18,19 +18,25 @@ namespace Ms.Tdd.Adf.Tests.Specs.Hooks
         };
 
         [BeforeScenario("RequiresAdf", Order = 1)]
-        public async Task LoadConfigurationBeforeScenario(ScenarioContext scenarioContext, IObjectContainer objectContainer, IConfiguration configuration)
+        public async Task LoadConfigurationBeforeScenario(
+            ScenarioContext scenarioContext, 
+            IObjectContainer objectContainer, 
+            IConfiguration configuration, 
+            ADFTestConfiguration adfTestConfiguration)
         {
             if (configuration is null)
             {
                 throw new ArgumentNullException(nameof(configuration));
             }
 
+            if (adfTestConfiguration is null)
+            {
+                throw new ArgumentNullException(nameof(adfTestConfiguration));
+            }
+
             AzureDataFactoryConfiguration? azureDataFactoryConfiguration = configuration.GetSection("AzureDataFactory").Get<AzureDataFactoryConfiguration>();
             objectContainer.RegisterInstanceAs(azureDataFactoryConfiguration!);
-
-            ADFTestConfiguration? adfTestConfiguration = configuration.GetSection("").Get<ADFTestConfiguration>();
             DataFactoryManagementClient adfClient = await BuildAdfTestClient(azureDataFactoryConfiguration, adfTestConfiguration).ConfigureAwait(false);
-
             scenarioContext.Add(ScenarioContextValues.ADF_CLIENT, adfClient);
         }
 
