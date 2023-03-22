@@ -26,17 +26,24 @@ namespace Ms.Tdd.Adf.Tests.Specs.Hooks
             }
 
             AzureDataFactoryConfiguration? azureDataFactoryConfiguration = configuration.GetSection("AzureDataFactory").Get<AzureDataFactoryConfiguration>();
-            ADFTestConfiguration? adfTestConfiguration = configuration.GetSection("").Get<ADFTestConfiguration>();
             objectContainer.RegisterInstanceAs(azureDataFactoryConfiguration!);
 
+            ADFTestConfiguration? adfTestConfiguration = configuration.GetSection("").Get<ADFTestConfiguration>();
+            DataFactoryManagementClient adfClient = await BuildAdfTestClient(azureDataFactoryConfiguration, adfTestConfiguration).ConfigureAwait(false);
+
+            scenarioContext.Add(ScenarioContextValues.ADF_CLIENT, adfClient);
+        }
+
+        private async Task<DataFactoryManagementClient> BuildAdfTestClient(AzureDataFactoryConfiguration? azureDataFactoryConfiguration, ADFTestConfiguration? adfTestConfiguration)
+        {
+            // TODO: Change Credentials to obey `adfTestConfiguration.UseAzureCliCredentials` flag when ready.
             var azureCliCredentials = new AzureCliCredential();
             var accessToken = await azureCliCredentials.GetTokenAsync(new TokenRequestContext(requiredScopes, tenantId: azureDataFactoryConfiguration?.TenantId)).ConfigureAwait(false);
             var adfClient = new DataFactoryManagementClient(new TokenCredentials(accessToken.Token))
             {
                 SubscriptionId = azureDataFactoryConfiguration?.SubscriptionId,
             };
-
-            scenarioContext.Add(ScenarioContextValues.ADF_CLIENT, adfClient);
+            return adfClient;
         }
     }
 }
