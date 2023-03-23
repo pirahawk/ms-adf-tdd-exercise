@@ -1,4 +1,6 @@
 ﻿using Azure.Storage.Blobs;
+using FluentAssertions;
+using Ms.Tdd.Adf.Tests.Specs.Helpers;
 using Ms.Tdd.Adf.Tests.Specs.Models;
 using TechTalk.SpecFlow;
 
@@ -19,10 +21,15 @@ namespace Ms.Tdd.Adf.Tests.Specs.Steps
         }
 
         [Given(@"I upload a sample data file '([^']*)' to the Azure Blob Storage")]
-        public void GivenIUploadASampleDataFileToTheAzureBlobStorage(string dataFileName)
+        public async Task GivenIUploadASampleDataFileToTheAzureBlobStorage(string dataFileName)
         {
+            var uploadBlobFileName = $"{dataFileName}.csv";
             var blobContainerClient = blobServiceClient.GetBlobContainerClient(azureBlobStorageConfiguraton.UploadContainerName);
-        }
+            using var filestream = TestsHelper.GetFileStreamForResourceFile(dataFileName);
 
+            var deleteResponse = await blobContainerClient.DeleteBlobIfExistsAsync(uploadBlobFileName, Azure.Storage.Blobs.Models.DeleteSnapshotsOption.IncludeSnapshots);
+            var uploadResult = await blobContainerClient.UploadBlobAsync(uploadBlobFileName, filestream);
+            uploadResult.GetRawResponse().IsError.Should().BeFalse();
+        }
     }
 }

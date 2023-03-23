@@ -11,7 +11,7 @@ param sqlAdminPassword string
 param sqlDbName string
 
 param mail string
-param sid string
+param userPrincipalId string
 param tenantId string
 
 module deployStorageAccount 'modules/storage.bicep' = {
@@ -31,7 +31,7 @@ module deployAzSqlServer './modules/sqlserver.bicep' = {
     sqlAdminName: sqlAdminName
     sqlAdminPassword: sqlAdminPassword
     login: mail
-    sid: sid
+    sid: userPrincipalId
     tenantId: tenantId
   }
 }
@@ -62,6 +62,7 @@ module rbacAssign 'modules/rbac-assign.bicep' = {
     sqlServerName: sqlServerName
     adfName : adfName
     adfPrincipalId: deployAdf.outputs.adfPrincipalId
+    userPrincipalId: userPrincipalId
   }
 }
 
