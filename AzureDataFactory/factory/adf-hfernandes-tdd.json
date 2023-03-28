@@ -1,0 +1,9 @@
+{
+	"name": "adf-hfernandes-tdd",
+	"location": "uksouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "322086bc-4c7b-4932-877d-e3da71d7590a",
+		"tenantId": "16b3c013-d300-468d-ac64-7eda0820b6d3"
+	}
+}

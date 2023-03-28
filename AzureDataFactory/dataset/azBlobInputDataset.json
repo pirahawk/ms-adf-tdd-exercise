@@ -1,0 +1,38 @@
+{
+	"name": "azBlobInputDataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adfblobstorage",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"InputContainer": {
+				"type": "String"
+			},
+			"InputFileName": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().InputFileName",
+					"type": "Expression"
+				},
+				"container": {
+					"value": "@dataset().InputContainer",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\"",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

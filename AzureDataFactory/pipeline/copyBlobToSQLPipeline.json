@@ -1,0 +1,133 @@
+{
+	"name": "copyBlobToSQLPipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy Blob to SQL",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "HomeTeam",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Home",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "AwayTeam",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Away",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FTHG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ScoreHome",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "FTAG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ScoreAway",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "FTR",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Result",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "azBlobInputDataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"InputContainer": "adfinput",
+							"InputFileName": "match-scores.csv"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "azSQLOutpuDataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"TableSchema": "dbo",
+							"TableName": "MatchScores"
+						}
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2023-03-22T18:47:53Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
