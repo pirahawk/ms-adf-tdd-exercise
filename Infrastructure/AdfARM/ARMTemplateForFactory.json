@@ -10,11 +10,11 @@
         "adfSqlDb_connectionString": {
             "type": "secureString",
             "metadata": "Secure string for 'connectionString' of 'adfSqlDb'",
-            "defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=sqlservertdd.database.windows.net;Initial Catalog=sqlDb-tdd"
+            "defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=sqlserver.database.windows.net;Initial Catalog=sqlDb"
         },
         "adfblobstorage_properties_typeProperties_serviceEndpoint": {
             "type": "string",
-            "defaultValue": "https://stotdd001.blob.core.windows.net/"
+            "defaultValue": "https://storage.blob.core.windows.net/"
         }
     },
     "variables": {
