@@ -17,6 +17,13 @@ namespace Ms.Tdd.Adf.Tests.Specs.Steps
             this.sqlConnection = sqlConnection ?? throw new ArgumentNullException(nameof(sqlConnection));
         }
 
+        [Given(@"I want to truncate all MatchScores data before running a test\.")]
+        public async Task GivenIWantToClearAllMatchScoresDataBeforeRunningATest_()
+        {
+            var truncateCommand = @"TRUNCATE TABLE dbo.MatchScores";
+            var result = await sqlConnection.ExecuteAsync(truncateCommand);
+        }
+
         [Then(@"the SQL table MatchScores contains the following entries")]
         public void ThenTheSQLTableMatchScoresContainsTheFollowingEntries(Table table)
         {

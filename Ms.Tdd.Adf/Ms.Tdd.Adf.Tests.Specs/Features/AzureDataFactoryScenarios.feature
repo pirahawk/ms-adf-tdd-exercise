@@ -1,6 +1,8 @@
 ﻿Feature: AzureDataFactoryScenarios
 I want to write some Specflow Tests to Test Azure Data Factory
 
+Background:
+	Given I want to truncate all MatchScores data before running a test.
 
 Scenario: I am trying to ensure I can invoke an Azure Data Factory Pipeline
 	Given I upload a sample data file 'matchScores' to the Azure Blob Storage
