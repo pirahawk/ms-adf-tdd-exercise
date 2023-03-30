@@ -14,7 +14,7 @@ $email = Read-Host "Email Address"
 $sid = Read-Host "Admin Object ID"
 #SID (object ID) of the server administrator.
 $bicepPath = Read-Host "Bicep Script Path"
-$AdfARMPath =  = Read-Host "ADF ARM Path"
+$AdfARMPath = Read-Host "ADF ARM Path"
 $AdfARMParametersPath = Read-Host "ADF ARM Parameters Path"
 
 #login to azure 
