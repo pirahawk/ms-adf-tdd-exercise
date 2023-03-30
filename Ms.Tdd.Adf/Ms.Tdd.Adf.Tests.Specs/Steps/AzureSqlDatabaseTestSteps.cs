@@ -21,13 +21,14 @@ namespace Ms.Tdd.Adf.Tests.Specs.Steps
         public async Task GivenIWantToClearAllMatchScoresDataBeforeRunningATest_()
         {
             var truncateCommand = @"TRUNCATE TABLE dbo.MatchScores";
-            var result = await sqlConnection.ExecuteAsync(truncateCommand);
+            await sqlConnection.ExecuteAsync(truncateCommand);
         }
 
         [Then(@"the SQL table MatchScores contains the following entries")]
         public void ThenTheSQLTableMatchScoresContainsTheFollowingEntries(Table table)
         {
-            var expectedRows = table.Rows.Select(row => new MatchRow {
+            var expectedRows = table.Rows.Select(row => new MatchRow
+            {
                 Home = row[0],
                 Away = row[1],
                 ScoreHome = int.Parse(row[2]),
@@ -36,13 +37,13 @@ namespace Ms.Tdd.Adf.Tests.Specs.Steps
             });
 
             var query = $"select [Id],[Home],[Away],[ScoreHome],[ScoreAway],[Result] from MatchScores";
-            
+
             var actualResults = sqlConnection
                                 .Query<MatchRow>(query)
                                 .ToArray();
             using (var assertionScope = new AssertionScope())
             {
-                
+
                 foreach (MatchRow expectedRow in expectedRows)
                 {
                     var reason = $"Could not find record - [Home]:{expectedRow.Home},[Away]:{expectedRow.Away},[ScoreHome]:{expectedRow.ScoreHome},[ScoreAway]:{expectedRow.ScoreAway},[Result]:{expectedRow.Result}";

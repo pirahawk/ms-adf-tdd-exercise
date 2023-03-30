@@ -8,10 +8,10 @@ using TechTalk.SpecFlow;
 namespace Ms.Tdd.Adf.Tests.Specs.Hooks
 {
     [Binding]
-    public class AzureSqlDatabaseHook
+    public class AzureSqlDatabaseConnectionBuilderHook
     {
         [BeforeScenario(Order = 1)]
-        public static void StoreAzureSqlDbConfiguration(
+        public static void BuildDatabaseConnection(
             ScenarioContext scenarioContext,
             IObjectContainer objectContainer,
             IConfiguration configuration)

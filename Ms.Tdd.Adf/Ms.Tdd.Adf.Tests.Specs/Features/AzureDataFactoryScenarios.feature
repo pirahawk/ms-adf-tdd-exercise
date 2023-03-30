@@ -14,4 +14,3 @@ Scenario: I am trying to ensure I can invoke an Azure Data Factory Pipeline
 		| Huddersfield | Chelsea   | 0         | 3         | A      |
 		| Newcastle    | Tottenham | 1         | 2         | A      |
 		| Watford      | Brighton  | 2         | 0         | H      |
-

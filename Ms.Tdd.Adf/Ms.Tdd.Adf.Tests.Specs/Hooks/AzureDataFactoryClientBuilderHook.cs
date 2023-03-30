@@ -14,7 +14,7 @@ namespace Ms.Tdd.Adf.Tests.Specs.Hooks
     public class AzureDataFactoryClientBuilderHook
     {
         [BeforeScenario(Order = 1)]
-        public async Task LoadConfigurationBeforeScenario(
+        public async Task BuildDataFactoryManagementClient(
             ScenarioContext scenarioContext,
             IObjectContainer objectContainer,
             IConfiguration configuration,
