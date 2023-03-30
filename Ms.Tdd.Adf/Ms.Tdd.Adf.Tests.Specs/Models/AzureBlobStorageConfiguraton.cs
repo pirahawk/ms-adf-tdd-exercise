@@ -2,7 +2,7 @@
 {
     public record AzureBlobStorageConfiguraton
     {
-        public string Uri { get; set; }
-        public string UploadContainerName { get; set; }
+        public string? Uri { get; set; }
+        public string? UploadContainerName { get; set; }
     }
 }

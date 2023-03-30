@@ -1,6 +1,7 @@
 ﻿using Azure.Identity;
 using Azure.Storage.Blobs;
 using BoDi;
+using Microsoft;
 using Microsoft.Extensions.Configuration;
 using Ms.Tdd.Adf.Tests.Specs.Models;
 using TechTalk.SpecFlow;
@@ -8,22 +9,20 @@ using TechTalk.SpecFlow;
 namespace Ms.Tdd.Adf.Tests.Specs.Hooks
 {
     [Binding]
-    public class AzureBloblStorageClientBuilderHook
+    public class AzureBlobStorageClientBuilderHook
     {
         [BeforeScenario(Order = 1)]
-        public static async Task BuildAzureBlobStorageClient(
+        public static void BuildAzureBlobStorageClient(
             ScenarioContext scenarioContext, 
             IObjectContainer objectContainer, 
-            IConfiguration configuration, 
-            ADFTestConfiguration adfTestConfiguration)
+            IConfiguration configuration)
         {
-            if (configuration is null)
-            {
-                throw new ArgumentNullException(nameof(configuration));
-            }
+            Assumes.NotNull(configuration);
 
             AzureBlobStorageConfiguraton? azureBlobStorageConfiguraton = configuration.GetSection("AzureBlobStorage").Get<AzureBlobStorageConfiguraton>();
-            var blobServiceClient = new BlobServiceClient(new Uri(azureBlobStorageConfiguraton!.Uri), new AzureCliCredential());
+            Assumes.NotNull(azureBlobStorageConfiguraton);
+            Assumes.NotNullOrEmpty(azureBlobStorageConfiguraton!.Uri);
+            var blobServiceClient = new BlobServiceClient(new Uri(azureBlobStorageConfiguraton.Uri), new AzureCliCredential());
             
             objectContainer.RegisterInstanceAs(azureBlobStorageConfiguraton);
             objectContainer.RegisterInstanceAs(blobServiceClient);

@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Microsoft.Azure.Management.DataFactory;
-using Microsoft.Extensions.Configuration;
 using Ms.Tdd.Adf.Tests.Specs.Models;
 using Microsoft.Azure.Management.DataFactory.Models;
 using TechTalk.SpecFlow;

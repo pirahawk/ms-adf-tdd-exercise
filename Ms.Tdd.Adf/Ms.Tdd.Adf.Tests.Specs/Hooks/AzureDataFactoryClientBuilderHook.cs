@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using Azure.Identity;
 using BoDi;
+using Microsoft;
 using Microsoft.Azure.Management.DataFactory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Rest;
@@ -19,15 +20,8 @@ namespace Ms.Tdd.Adf.Tests.Specs.Hooks
             IConfiguration configuration,
             ADFTestConfiguration adfTestConfiguration)
         {
-            if (configuration is null)
-            {
-                throw new ArgumentNullException(nameof(configuration));
-            }
-
-            if (adfTestConfiguration is null)
-            {
-                throw new ArgumentNullException(nameof(adfTestConfiguration));
-            }
+            Assumes.NotNull(configuration);
+            Assumes.NotNull(adfTestConfiguration);
 
             AzureDataFactoryConfiguration? azureDataFactoryConfiguration = configuration.GetSection("AzureDataFactory").Get<AzureDataFactoryConfiguration>();
             DataFactoryManagementClient adfClient = await BuildAdfTestClient(azureDataFactoryConfiguration, adfTestConfiguration).ConfigureAwait(false);
