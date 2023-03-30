@@ -13,7 +13,7 @@ $sqlAdminPassword = Read-Host "Set Sql Admin Password"
 $email = Read-Host "Email Address"
 $sid = Read-Host "Admin Object ID"
 #SID (object ID) of the server administrator.
-$bicepPath = "/bicep/full-pipeline.bicep"
+$bicepPath = Read-Host "Bicep Script Location"
 
 #login to azure 
 az login --tenant $TenantId
