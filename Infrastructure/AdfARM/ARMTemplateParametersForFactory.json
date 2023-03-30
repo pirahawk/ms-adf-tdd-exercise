@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "factoryName": {
+            "value": "testdrivenadf001"
+        },
+        "adfSqlDb_connectionString": {
+            "value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=testdrivensqlsvr.database.windows.net;Initial Catalog=testdrivensqldb001"
+        },
+        "adfblobstorage_properties_typeProperties_serviceEndpoint": {
+            "value": "https://stotdd001.blob.core.windows.net/"
+        }
+    }
+}

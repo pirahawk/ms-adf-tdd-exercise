@@ -13,7 +13,9 @@ $sqlAdminPassword = Read-Host "Set Sql Admin Password"
 $email = Read-Host "Email Address"
 $sid = Read-Host "Admin Object ID"
 #SID (object ID) of the server administrator.
-$bicepPath = Read-Host "Bicep Script Location"
+$bicepPath = Read-Host "Bicep Script Path"
+$AdfARMPath =  = Read-Host "ADF ARM Path"
+$AdfARMParametersPath = Read-Host "ADF ARM Parameters Path"
 
 #login to azure 
 az login --tenant $TenantId
@@ -26,4 +28,4 @@ Write-Host "Deploying Resources"
 az deployment group create --name ResourceDeployment --resource-group $resource_group --template-file $bicepPath --parameters resourceGroupName="$resource_group" targetLocation="$location" storageAccountName="$storageAccName" adfName="$adfName" sqlServerName="$sqlservername" sqlAdminName="$sqladmin" sqlAdminPassword="$sqlAdminPassword" sqlDbName="$sqldbname" mail="$email" sid="$sid" tenantId="$TenantId"
 
 Write-Host "Deploying ADF ARM"
-az deployment group create  --resource-group $resource_group --name DeployingADFARM --parameters ARMTemplateParametersForFactory.json --template-file ARMTemplateForFactory.json
+az deployment group create  --resource-group $resource_group --name DeployingADFARM --parameters $AdfARMParametersPath --template-file $AdfARMPath

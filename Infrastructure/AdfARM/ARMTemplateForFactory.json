@@ -1,0 +1,460 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "factoryName": {
+            "type": "string",
+            "metadata": "Data Factory name",
+            "defaultValue": "adf-hfernandes-tdd"
+        },
+        "adfSqlDb_connectionString": {
+            "type": "secureString",
+            "metadata": "Secure string for 'connectionString' of 'adfSqlDb'",
+            "defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=sqlservertdd.database.windows.net;Initial Catalog=sqlDb-tdd"
+        },
+        "adfblobstorage_properties_typeProperties_serviceEndpoint": {
+            "type": "string",
+            "defaultValue": "https://stotdd001.blob.core.windows.net/"
+        }
+    },
+    "variables": {
+        "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+    },
+    "resources": [
+        {
+            "name": "[concat(parameters('factoryName'), '/copyBlobBetweenContainersPipeline')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "Copy Input to Output",
+                        "type": "Copy",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "0.12:00:00",
+                            "retry": 2,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "DelimitedTextSource",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageReadSettings",
+                                    "recursive": true,
+                                    "enablePartitionDiscovery": false
+                                },
+                                "formatSettings": {
+                                    "type": "DelimitedTextReadSettings"
+                                }
+                            },
+                            "sink": {
+                                "type": "DelimitedTextSink",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageWriteSettings"
+                                },
+                                "formatSettings": {
+                                    "type": "DelimitedTextWriteSettings",
+                                    "quoteAllText": true,
+                                    "fileExtension": ".txt"
+                                }
+                            },
+                            "enableStaging": false,
+                            "translator": {
+                                "type": "TabularTranslator",
+                                "mappings": [
+                                    {
+                                        "source": {
+                                            "name": "HomeTeam",
+                                            "type": "String",
+                                            "physicalType": "String"
+                                        },
+                                        "sink": {
+                                            "name": "HomeTeam",
+                                            "type": "String",
+                                            "physicalType": "String"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "AwayTeam",
+                                            "type": "String",
+                                            "physicalType": "String"
+                                        },
+                                        "sink": {
+                                            "name": "AwayTeam",
+                                            "type": "String",
+                                            "physicalType": "String"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "FTHG",
+                                            "type": "String",
+                                            "physicalType": "String"
+                                        },
+                                        "sink": {
+                                            "name": "FTHG",
+                                            "type": "String",
+                                            "physicalType": "String"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "FTAG",
+                                            "type": "String",
+                                            "physicalType": "String"
+                                        },
+                                        "sink": {
+                                            "name": "FTAG",
+                                            "type": "String",
+                                            "physicalType": "String"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "FTR",
+                                            "type": "String",
+                                            "physicalType": "String"
+                                        },
+                                        "sink": {
+                                            "name": "FTR",
+                                            "type": "String",
+                                            "physicalType": "String"
+                                        }
+                                    }
+                                ],
+                                "typeConversion": true,
+                                "typeConversionSettings": {
+                                    "allowDataTruncation": true,
+                                    "treatBooleanAsNumber": false
+                                }
+                            }
+                        },
+                        "inputs": [
+                            {
+                                "referenceName": "azBlobInputDataset",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "InputContainer": "adfinput",
+                                    "InputFileName": "match-scores.csv"
+                                }
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "referenceName": "azBlobOutpuDataset",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "OutputContainer": "adfoutput",
+                                    "OutputFileName": "match-scores.csv"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "policy": {
+                    "elapsedTimeMetric": {},
+                    "cancelAfter": {}
+                },
+                "annotations": [],
+                "lastPublishTime": "2023-03-22T18:41:01Z"
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/datasets/azBlobInputDataset')]",
+                "[concat(variables('factoryId'), '/datasets/azBlobOutpuDataset')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/copyBlobToSQLPipeline')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "Copy Blob to SQL",
+                        "type": "Copy",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "0.12:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "DelimitedTextSource",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageReadSettings",
+                                    "recursive": true,
+                                    "enablePartitionDiscovery": false
+                                },
+                                "formatSettings": {
+                                    "type": "DelimitedTextReadSettings"
+                                }
+                            },
+                            "sink": {
+                                "type": "AzureSqlSink",
+                                "writeBehavior": "insert",
+                                "sqlWriterUseTableLock": false,
+                                "disableMetricsCollection": false
+                            },
+                            "enableStaging": false,
+                            "translator": {
+                                "type": "TabularTranslator",
+                                "mappings": [
+                                    {
+                                        "source": {
+                                            "name": "HomeTeam",
+                                            "type": "String",
+                                            "physicalType": "String"
+                                        },
+                                        "sink": {
+                                            "name": "Home",
+                                            "type": "String",
+                                            "physicalType": "nvarchar"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "AwayTeam",
+                                            "type": "String",
+                                            "physicalType": "String"
+                                        },
+                                        "sink": {
+                                            "name": "Away",
+                                            "type": "String",
+                                            "physicalType": "nvarchar"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "FTHG",
+                                            "type": "String",
+                                            "physicalType": "String"
+                                        },
+                                        "sink": {
+                                            "name": "ScoreHome",
+                                            "type": "Int32",
+                                            "physicalType": "int"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "FTAG",
+                                            "type": "String",
+                                            "physicalType": "String"
+                                        },
+                                        "sink": {
+                                            "name": "ScoreAway",
+                                            "type": "Int32",
+                                            "physicalType": "int"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "FTR",
+                                            "type": "String",
+                                            "physicalType": "String"
+                                        },
+                                        "sink": {
+                                            "name": "Result",
+                                            "type": "String",
+                                            "physicalType": "nvarchar"
+                                        }
+                                    }
+                                ],
+                                "typeConversion": true,
+                                "typeConversionSettings": {
+                                    "allowDataTruncation": true,
+                                    "treatBooleanAsNumber": false
+                                }
+                            }
+                        },
+                        "inputs": [
+                            {
+                                "referenceName": "azBlobInputDataset",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "InputContainer": "adfinput",
+                                    "InputFileName": "match-scores.csv"
+                                }
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "referenceName": "azSQLOutpuDataset",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "TableSchema": "dbo",
+                                    "TableName": "MatchScores"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "policy": {
+                    "elapsedTimeMetric": {},
+                    "cancelAfter": {}
+                },
+                "annotations": [],
+                "lastPublishTime": "2023-03-22T18:47:53Z"
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/datasets/azBlobInputDataset')]",
+                "[concat(variables('factoryId'), '/datasets/azSQLOutpuDataset')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/azBlobInputDataset')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "adfblobstorage",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "InputContainer": {
+                        "type": "String"
+                    },
+                    "InputFileName": {
+                        "type": "String"
+                    }
+                },
+                "annotations": [],
+                "type": "DelimitedText",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobStorageLocation",
+                        "fileName": {
+                            "value": "@dataset().InputFileName",
+                            "type": "Expression"
+                        },
+                        "container": {
+                            "value": "@dataset().InputContainer",
+                            "type": "Expression"
+                        }
+                    },
+                    "columnDelimiter": ",",
+                    "escapeChar": "\"",
+                    "firstRowAsHeader": true,
+                    "quoteChar": "\""
+                },
+                "schema": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/adfblobstorage')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/azBlobOutpuDataset')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "adfblobstorage",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "OutputContainer": {
+                        "type": "String"
+                    },
+                    "OutputFileName": {
+                        "type": "String"
+                    }
+                },
+                "annotations": [],
+                "type": "DelimitedText",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobStorageLocation",
+                        "fileName": {
+                            "value": "@dataset().OutputFileName",
+                            "type": "Expression"
+                        },
+                        "container": {
+                            "value": "@dataset().OutputContainer",
+                            "type": "Expression"
+                        }
+                    },
+                    "columnDelimiter": ",",
+                    "escapeChar": "\"",
+                    "firstRowAsHeader": true,
+                    "quoteChar": "\""
+                },
+                "schema": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/adfblobstorage')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/azSQLOutpuDataset')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "adfSqlDb",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "TableSchema": {
+                        "type": "String"
+                    },
+                    "TableName": {
+                        "type": "String"
+                    }
+                },
+                "annotations": [],
+                "type": "AzureSqlTable",
+                "schema": [],
+                "typeProperties": {
+                    "schema": {
+                        "value": "@dataset().TableSchema",
+                        "type": "Expression"
+                    },
+                    "table": {
+                        "value": "@dataset().TableName",
+                        "type": "Expression"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/adfSqlDb')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/adfSqlDb')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureSqlDatabase",
+                "typeProperties": {
+                    "connectionString": "[parameters('adfSqlDb_connectionString')]"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/adfblobstorage')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureBlobStorage",
+                "typeProperties": {
+                    "serviceEndpoint": "[parameters('adfblobstorage_properties_typeProperties_serviceEndpoint')]",
+                    "accountKind": "StorageV2"
+                }
+            },
+            "dependsOn": []
+        }
+    ]
+}
