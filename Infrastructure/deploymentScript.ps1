@@ -16,6 +16,7 @@ $sid = Read-Host "Admin Object ID"
 $bicepPath = Read-Host "Bicep Script Path"
 $AdfARMPath = Read-Host "ADF ARM Path"
 $AdfARMParametersPath = Read-Host "ADF ARM Parameters Path"
+$SampleDataPath = Read-Host "Sample Data Path Folder ending with /"
 
 #login to azure 
 az login --tenant $TenantId
@@ -29,3 +30,8 @@ az deployment group create --name ResourceDeployment --resource-group $resource_
 
 Write-Host "Deploying ADF ARM"
 az deployment group create  --resource-group $resource_group --name DeployingADFARM --parameters $AdfARMParametersPath --template-file $AdfARMPath
+
+az role assignment create --assignee "$sid" --role "ba92f5b4-2d11-453d-a403-e96b0029c9fe" --scope "/subscriptions/$subscriptionId/resourcegroups/$resource_group/providers/Microsoft.Storage/storageAccounts/$storageAccName"
+
+Write-Host "Upload Sample Data"
+ az storage blob upload-batch --destination adfinput --account-name $storageAccName --source $SampleDataPath --auth-mode login
