@@ -16,7 +16,7 @@ $sid = Read-Host "Admin Object ID"
 $bicepPath = Read-Host "Bicep Script Path"
 $AdfARMPath = Read-Host "ADF ARM Path"
 $AdfARMParametersPath = Read-Host "ADF ARM Parameters Path"
-$SampleDataPath = Read-Host "Sample Data Path Folder ending with /"
+$SampleDataPath = Read-Host "Sample Data Path Folder"
 
 #login to azure 
 az login --tenant $TenantId
