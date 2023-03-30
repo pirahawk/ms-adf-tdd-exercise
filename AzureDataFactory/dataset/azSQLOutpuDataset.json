@@ -1,0 +1,31 @@
+{
+	"name": "azSQLOutpuDataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adfSqlDb",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TableSchema": {
+				"type": "String"
+			},
+			"TableName": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().TableSchema",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().TableName",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
