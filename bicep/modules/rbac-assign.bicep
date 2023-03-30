@@ -2,6 +2,8 @@ param storageAccountName string
 param adfName string
 param adfPrincipalId string
 param sqlServerName string
+param userPrincipalId string
+
 
 resource adf 'Microsoft.DataFactory/factories@2018-06-01' existing = {
   name: adfName
@@ -24,8 +26,22 @@ resource SqlDbContributorRole 'Microsoft.Authorization/roleDefinitions@2022-04-0
   name: '9b7fa17d-e63e-47b0-bb0a-15c516ac86ec'
 }
 
+resource StorageBlobDataOwnerRole 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
+  name: 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b'
+}
+
+resource storageAccountBlobDataOwnerMe 'Microsoft.Authorization/roleAssignments@2022-04-01' ={
+  name: guid(storageAccount.id, userPrincipalId, StorageBlobDataOwnerRole.name)
+  scope: storageAccount
+  properties:{
+    principalId: userPrincipalId
+    roleDefinitionId: StorageBlobDataOwnerRole.id
+    principalType: 'User'
+    description: 'Assigning contributor role on ${storageAccount} to Me'
+  }
+}
+
 resource storageAccountReaderAdf 'Microsoft.Authorization/roleAssignments@2022-04-01' ={
-  // name: adfPrincipalId
   name: guid(storageAccount.id, adfPrincipalId, ContributorRole.name)
   scope: storageAccount
   properties:{

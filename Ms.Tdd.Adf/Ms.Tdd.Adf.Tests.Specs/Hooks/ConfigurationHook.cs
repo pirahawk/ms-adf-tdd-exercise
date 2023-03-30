@@ -18,8 +18,11 @@ namespace Ms.Tdd.Adf.Tests.Specs.Hooks
                 .AddUserSecrets(Assembly.GetExecutingAssembly(), true)
                 .AddEnvironmentVariables();
 
-            scenarioContext.Add(ScenarioContextValues.CONFIGURATION_BUILDER, configurationBuilder);
-            objectContainer.RegisterInstanceAs<IConfiguration>(configurationBuilder.Build());
+            var configuration = configurationBuilder.Build();
+            ADFTestConfiguration? adfTestConfiguration = configuration.Get<ADFTestConfiguration>();
+
+            objectContainer.RegisterInstanceAs<IConfiguration>(configuration);
+            objectContainer.RegisterInstanceAs<ADFTestConfiguration>(adfTestConfiguration!);
         }
     }
 }
