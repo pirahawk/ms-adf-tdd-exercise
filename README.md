@@ -30,5 +30,6 @@ You will need the following information before running the deployment script:
 ## Running the Powershell Deployment Script
 
 1. Open Powershell as Administrator
-2. Enter command powershell.exe -File <ps1 location> using the location of the Infrastructure/deploymentScript.ps1 powershell script on your computer.
-1. Follow the prompts to enter the required parameters for deployment.
+2. Enter command powershell.exe -File <ps1 location> using the location of the Infrastructure/deploymentScript.ps1 powershell script on your computer
+3. Follow the prompts to enter the required parameters for deployment
+4. The script will deploy all required resources to your Subscription, including uploading sample data to the Storage account container
