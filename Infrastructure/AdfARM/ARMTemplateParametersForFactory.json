@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "factoryName": {
-            "value": "<factoryName>"
+            "value": "testdrivenadf001"
         },
         "adfSqlDb_connectionString": {
-            "value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=<serverName>.database.windows.net;Initial Catalog=<databaseName>"
+            "value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=testdrivensqlsvr.database.windows.net;Initial Catalog=testdrivensqldb001"
         },
         "adfblobstorage_properties_typeProperties_serviceEndpoint": {
-            "value": "https://<storageAccountName>.blob.core.windows.net/"
+            "value": "https://testdrivenstg001.blob.core.windows.net/"
         }
     }
 }
