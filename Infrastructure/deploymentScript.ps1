@@ -10,8 +10,8 @@ $sqlservername = $projectname + "sqlsvr"
 $sqldbname = $projectname + "sqldb001"
 $sqladmin = Read-Host "Sql Admin Login"
 $sqlAdminPassword = Read-Host "Set Sql Admin Password"
-$email = Read-Host "Email Address"
-$sid = Read-Host "Admin Object ID"
+$email = @(az ad signed-in-user show --query mail -o tsv)
+$sid = @(az ad signed-in-user show --query objectId -o tsv)
 #SID (object ID) of the server administrator.
 $bicepPath = Read-Host "Bicep Script Path"
 $AdfARMPath = Read-Host "ADF ARM Path"
