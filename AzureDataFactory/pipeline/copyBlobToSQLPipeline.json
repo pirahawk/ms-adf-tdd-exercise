@@ -116,7 +116,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "azSQLOutpuDataset",
+						"referenceName": "azSQLOutputDataset",
 						"type": "DatasetReference",
 						"parameters": {
 							"TableSchema": "dbo",

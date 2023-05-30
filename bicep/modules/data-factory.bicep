@@ -81,72 +81,72 @@ resource azuredatafactory 'Microsoft.DataFactory/factories@2018-06-01' = {
 
   // Pipelines
 
-  resource copyBlobBetweenContainersPipeline 'pipelines@2018-06-01' = {
-    name: 'copyBlobBetweenContainersPipeline'
-    properties: {
-      activities: [
-        {
-          name: 'CopyBlobFromInputToOutputContainer'
-          type: 'Copy'
-          typeProperties: {
-            source: {
-              type: 'BinarySource'
-              storeSettings: {
-                type: 'AzureBlobStorageReadSettings'
-                recursive: true
-              }
-            }
-            sink: {
-              type: 'BinarySink'
-              storeSettings: {
-                type: 'AzureBlobStorageWriteSettings'
-              }
-            }
-          }
-          inputs: [
-            {
-              referenceName: azBlobInputDataset.name
-              type: 'DatasetReference'
-            }
-          ]
+  // resource copyBlobBetweenContainersPipeline 'pipelines@2018-06-01' = {
+  //   name: 'copyBlobBetweenContainersPipeline'
+  //   properties: {
+  //     activities: [
+  //       {
+  //         name: 'CopyBlobFromInputToOutputContainer'
+  //         type: 'Copy'
+  //         typeProperties: {
+  //           source: {
+  //             type: 'BinarySource'
+  //             storeSettings: {
+  //               type: 'AzureBlobStorageReadSettings'
+  //               recursive: true
+  //             }
+  //           }
+  //           sink: {
+  //             type: 'BinarySink'
+  //             storeSettings: {
+  //               type: 'AzureBlobStorageWriteSettings'
+  //             }
+  //           }
+  //         }
+  //         inputs: [
+  //           {
+  //             referenceName: azBlobInputDataset.name
+  //             type: 'DatasetReference'
+  //           }
+  //         ]
 
-          outputs: [
-            {
-              referenceName: azBlobOutpuDataset.name
-              type: 'DatasetReference'
-            }
-          ]
-        }
-      ]
-    }
-  }
+  //         outputs: [
+  //           {
+  //             referenceName: azBlobOutpuDataset.name
+  //             type: 'DatasetReference'
+  //           }
+  //         ]
+  //       }
+  //     ]
+  //   }
+  // }
 
 // Triggers
-resource copyBlobTrigger 'triggers@2018-06-01' = {
-  name: 'copyBlobTrigger'
-  properties: {
-    type: 'BlobEventsTrigger'
-    typeProperties:{
-      events:[
-        'Microsoft.Storage.BlobCreated'
-      ]
-      blobPathBeginsWith:'/${storageInputDatasetContainerName}/blobs/'
-      ignoreEmptyBlobs:true
-      scope: storageAccount.id
-    }
+// resource copyBlobTrigger 'triggers@2018-06-01' = {
+//   name: 'copyBlobTrigger'
+//   properties: {
+//     type: 'BlobEventsTrigger'
+//     typeProperties:{
+//       events:[
+//         'Microsoft.Storage.BlobCreated'
+//       ]
+//       blobPathBeginsWith:'/${storageInputDatasetContainerName}/blobs/'
+//       ignoreEmptyBlobs:true
+//       scope: storageAccount.id
+//     }
 
-    pipelines:[
-      {
-        parameters: {}
-        pipelineReference:{
-          type: 'PipelineReference'
-          referenceName: copyBlobBetweenContainersPipeline.name
-          name: copyBlobBetweenContainersPipeline.name
-        }
-      }
-    ]
-  }
-}
+//     pipelines:[
+//       {
+//         parameters: {}
+//         pipelineReference:{
+//           type: 'PipelineReference'
+//           referenceName: copyBlobBetweenContainersPipeline.name
+//           name: copyBlobBetweenContainersPipeline.name
+//         }
+//       }
+//     ]
+//   }
+// }
 
 
 }
